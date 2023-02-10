@@ -1,17 +1,24 @@
-FROM imdigvijaytw/alpine:latest
+FROM imdigvijaytw/alpine:latest as build
 
-WORKDIR /app
-
-COPY basic-calculator /app/basic-calculator
+COPY basic-calculator /app
 
 RUN apk update && \
-    apk upgrade && \
     apk add openjdk17 && \
     apk add maven
 
-RUN cd /app/basic-calculator && mvn clean package
+WORKDIR /app
+RUN mvn clean package
+
+FROM imdigvijaytw/alpine:latest as baseimage
+
+RUN apk update && \
+    apk add openjdk17-jre-headless
+
+FROM baseimage
+
+WORKDIR /app
+
+COPY --from=build /app/target/basic-calculator-1.0.jar basic-calculator-1.0.jar
 
 ENTRYPOINT ["java"]
-CMD ["-jar", "/app/basic-calculator/target/basic-calculator-1.0.jar"]
-
-# decrease the image size
+CMD ["-jar", "basic-calculator-1.0.jar"]
