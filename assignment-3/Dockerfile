@@ -1,5 +1,9 @@
 FROM alpine:latest
 
-CMD ["echo 'My name is Digvijay' && echo 'Few technologies I am learning this year are:' && echo '1. Docker' && echo '2. Kubernetes' && echo '3. Terraform' && echo '4. AWS'"]
+COPY info.sh /info.sh
+
+RUN chmod +x /info.sh
+
+CMD ["/info.sh"]
 
 ENTRYPOINT ["/bin/sh", "-c"]
