@@ -33,7 +33,8 @@ jobs:
       -
         name: Create Notice/Summary
         run: |
-          echo ::notice title=Metadata::${{ steps.build-and-push.outputs.metadata }}
+          set +e
+          echo ::notice title=Metadata::${{ steps.build-and-push.outputs.metadata.image.name }}
           echo ::notice title=Image id::${{ steps.build-and-push.outputs.imageid }}
           echo ::notice title=Digest::${{ steps.build-and-push.outputs.digest }}
 #      -
