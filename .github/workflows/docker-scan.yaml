@@ -1,0 +1,68 @@
+name: docker-scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        type: choice
+        required: true
+        description: 'Image to build and push to docker hub'
+        options:
+          - alpine
+          - maven
+          - npm
+          - capabilities
+          - busybox
+
+
+jobs:
+  docker-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Setup docker build vars
+        id: build_vars
+        run: |
+          case ${{ inputs.image }} in
+            alpine)
+              echo "context=./assignment_3/question_1" >> $GITHUB_OUTPUT
+            ;;
+            maven)
+              echo "context=./assignment_3/question_2/maven" >> $GITHUB_OUTPUT
+            ;;
+            npm)
+              echo "context=./assignment_3/question_2/node" >> $GITHUB_OUTPUT
+            ;;
+            capabilities)
+              echo "context=./assignment_3/question_3" >> $GITHUB_OUTPUT
+            ;;
+            busybox)
+              echo "context=./assignment_3/question_8" >> $GITHUB_OUTPUT
+            ;;
+          esac
+          echo "image=${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.image }}:latest" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build an image
+        id: build
+        run: |
+          docker build -t ${{ steps.build_vars.outputs.image }} ${{ steps.build_vars.outputs.context }}
+
+      - name: Run Trivy vulnerability scanner
+        id: trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.build_vars.outputs.image }}
+          format: 'table'
+          output: 'trivy-results.txt'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Trivy summary
+        if: contains('["success", "failure"]', steps.trivy.outcome) && always()
+        run: |
+          echo "## Trivy: \`${{ steps.trivy.outcome }}\`" >> $GITHUB_STEP_SUMMARY
+          echo $(cat trivy-results.txt) >> $GITHUB_STEP_SUMMARY
