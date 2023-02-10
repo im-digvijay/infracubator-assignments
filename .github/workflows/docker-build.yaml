@@ -9,36 +9,30 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout codebase
+      - name: Checkout codebase
         uses: actions/checkout@v3
-      -
-        name: Login to Docker Hub
+
+      - name: Compute git short SHA
+        id: git_sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      -
-        name: Build and push
+
+      - name: Build and push
         id: build-and-push
         uses: docker/build-push-action@v3
         with:
           context: "./assignment_3"
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ steps.git_sha.outputs.short }}
           file: "./assignment_3/Dockerfile.alpine"
-      -
-        name: Create Notice/Summary
-        run: |
-          set +e
-          image_name=$(echo '${{ steps.build-and-push.outputs.metadata }}' | jq -r '."image.name"')
-          echo ::notice title=Metadata::${image_name}
-#      -
-#        name: Build an image
-#        id: build
-#        run: |
-#          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }} -f assignment#3/Dockerfile.alpine assignment#3
-#          echo "image=${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create Notice
+        run: echo ::notice title=Image::${{ vars.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ steps.git_sha.outputs.short }}
