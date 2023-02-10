@@ -11,3 +11,5 @@ RUN npm install
 ENTRYPOINT ["npm"]
 
 CMD ["start"]
+
+# decrease the image size
