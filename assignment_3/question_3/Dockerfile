@@ -1,4 +1,4 @@
-FROM imdigvijaytw/custom-alpine:latest
+FROM imdigvijaytw/alpine:latest
 
 COPY capabilities.sh .
 

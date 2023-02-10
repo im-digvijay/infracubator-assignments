@@ -1,4 +1,4 @@
-FROM imdigvijaytw/custom-alpine:latest
+FROM imdigvijaytw/alpine:latest
 
 WORKDIR /app
 
@@ -13,3 +13,5 @@ RUN cd /app/basic-calculator && mvn clean package
 
 ENTRYPOINT ["java"]
 CMD ["-jar", "/app/basic-calculator/target/basic-calculator-1.0.jar"]
+
+# decrease the image size

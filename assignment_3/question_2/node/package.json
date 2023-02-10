@@ -1,0 +1,14 @@
+{
+  "name": "basic-calculator",
+  "version": "1.0.0",
+  "description": "A basic command line calculator app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Digvijay Singh",
+  "license": "MIT",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  }
+}

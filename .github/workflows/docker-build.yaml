@@ -8,10 +8,10 @@ on:
         required: true
         description: 'Image to build and push to docker hub'
         options:
-          - custom-alpine
-          - custom-maven
-          - custom-npm
-          - custom-capabilities
+          - alpine
+          - maven
+          - npm
+          - capabilities
       push-latest:
         type: boolean
         description: 'Push latest image to registry'
@@ -37,16 +37,16 @@ jobs:
         id: build_vars
         run: |
           case ${{ inputs.image }} in
-            custom-alpine)
+            alpine)
               echo "context=./assignment_3/question_1" >> $GITHUB_OUTPUT
             ;;
-            custom-maven)
+            maven)
               echo "context=./assignment_3/question_2/maven" >> $GITHUB_OUTPUT
             ;;
-            custom-npm)
+            npm)
               echo "context=./assignment_3/question_2/node" >> $GITHUB_OUTPUT
             ;;
-            custom-capabilities)
+            capabilities)
               echo "context=./assignment_3/question_3" >> $GITHUB_OUTPUT
             ;;
           esac
