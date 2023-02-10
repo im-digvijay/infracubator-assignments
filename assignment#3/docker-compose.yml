@@ -13,3 +13,11 @@ services:
       dockerfile: Dockerfile.maven
     depends_on:
       - custom-alpine
+
+  custom-capabilities:
+    image: custom-capabilities:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.capabilities
+    depends_on:
+      - custom-alpine
