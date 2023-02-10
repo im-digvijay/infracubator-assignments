@@ -1,8 +1,8 @@
-FROM custom-alpine:latest
+FROM imdigvijaytw/custom-alpine:latest
 
 COPY capabilities.sh .
 
-RUN chmod +x /capabilities.sh
+RUN chmod +x capabilities.sh
 
 CMD ["/capabilities.sh"]
 

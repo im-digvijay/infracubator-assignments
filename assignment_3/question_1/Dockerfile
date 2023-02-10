@@ -1,8 +1,8 @@
 FROM alpine:latest
 
-COPY info.sh /info.sh
+COPY info.sh .
 
-RUN chmod +x /info.sh
+RUN chmod +x info.sh
 
 CMD ["/info.sh"]
 

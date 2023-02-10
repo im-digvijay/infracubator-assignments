@@ -4,7 +4,7 @@ RUN echo "Hello" > prefix
 
 FROM alpine:latest
 
-COPY run.sh run.sh
+COPY run.sh .
 COPY --from=base prefix prefix
 
 ENV SHELL_ARG="cat prefix"
