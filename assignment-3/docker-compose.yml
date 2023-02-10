@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  custom-alpine:
+    image: custom-alpine:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.alpine
+
+  custom-maven:
+    image: custom-maven:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.maven
+    depends_on:
+      - custom-alpine
