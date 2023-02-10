@@ -22,13 +22,16 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
+        name: test
+        run: ls -al
+      -
         name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:assignment#3"
+          context: "./assignment_3"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }}
-          file: "{{context}}/Dockerfile.alpine"
+          file: "./assignment_3/Dockerfile.alpine"
 #      -
 #        name: Build an image
 #        id: build
