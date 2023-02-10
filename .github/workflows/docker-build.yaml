@@ -25,5 +25,5 @@ jobs:
         name: Build an image
         id: build
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }} Dockerfile.alpine
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }} -f assignment#3/Dockerfile.alpine assignment#3
           echo "image=${{ secrets.DOCKERHUB_USERNAME }}/custom-alpine:v1.${{ github.sha }}" >> $GITHUB_OUTPUT
