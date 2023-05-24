@@ -17,5 +17,5 @@ jobs:
       - name: Setup docker build vars
         id: build_vars
         run: |
-          echo "branch====> ${{ github.ref }}"
+          echo "branch====> ${{ github.ref#refs/heads/ }}"
           echo "tag =====> ${{ inputs.image-tag }}"
