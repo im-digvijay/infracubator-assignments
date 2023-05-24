@@ -18,5 +18,6 @@ jobs:
         id: build_vars
         run: |
           echo "branch====> ${{ github.ref }}"
+          echo "branch=${{ GITHUB_REF }}"
           echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
           echo "tag =====> ${{ inputs.image-tag }}"
