@@ -1,0 +1,23 @@
+name: playground
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'Image tag'
+        required: true
+        type: string
+
+jobs:
+  playground-run:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+      - name: Setup docker build vars
+        id: build_vars
+        run: |
+          echo "branch====> ${{ github.ref }}"
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          echo "tag =====> ${{ inputs.image-tag }}"
