@@ -2,28 +2,26 @@ name: databricks-test
 
 on:
   workflow_dispatch:
-    inputs:
-      test-input:
-        type: string
-        required: true
-        description: "Input String to test"
+#    inputs:
+#      test-input:
+#        type: string
+#        required: true
+#        description: "Input String to test"
 
 jobs:
   databricks:
     runs-on: ubuntu-latest
     steps:
-      - name: test-input
-        env:
-          regex: '^[^,].*[^,]$'
-        run: |
-          [[ ${{ inputs.test-input }} =~ ${{ env.regex }} ]]
-
-#      - name: install-databricks-cli
-#        uses: microsoft/install-databricks-cli@v1.0.0
-#
-#      - name: test
+#      - name: test-input
+#        env:
+#          regex: '^[^,].*[^,]$'
 #        run: |
-#          echo "SOME TEST"
-#          databricks -v
-#          databricks jobs list --version 2.1
-#          echo "${DATABRICKS_TOKEN}"
+#          [[ ${{ inputs.test-input }} =~ ${{ env.regex }} ]]
+
+      - name: install-databricks-cli
+        uses: microsoft/install-databricks-cli@v1.0.0
+
+      - name: test
+        run: |
+          databricks -v
+          databricks version
