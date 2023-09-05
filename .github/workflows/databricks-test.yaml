@@ -18,12 +18,18 @@ jobs:
 #        run: |
 #          [[ ${{ inputs.test-input }} =~ ${{ env.regex }} ]]
 
-      - name: install-databricks-cli
+      - name: configure databricks
+        env:
+          DATABRICKS_HOST: https://test-url.databricks.com
+          DATABRICKS_TOKEN: test-token
         run: |
-          curl -V
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          databricks version
+          echo "[DEFAULT]" >> .databrickscfg
+          echo "host = ${{ env.DATABRICKS_HOST }}" >> .databrickscfg
+          echo "token = ${{ env.DATABRICKS_TOKEN }}" >> .databrickscfg
+          cat .databrickscfg
 
       - name: test
         run: |
-          databricks -v
-          databricks version
+          cat .databrickscfg
