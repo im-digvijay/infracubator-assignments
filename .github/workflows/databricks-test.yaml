@@ -2,34 +2,42 @@ name: databricks-test
 
 on:
   workflow_dispatch:
-#    inputs:
-#      test-input:
-#        type: string
-#        required: true
-#        description: "Input String to test"
+    inputs:
+      secret-name:
+        description: 'Secret Name'
+        required: true
+        type: string
+      gha-secret-name:
+        description: 'GHA Secret Name to fetch secret value'
+        required: true
+        type: string
 
 jobs:
   databricks:
+    env:
+      DATABRICKS_HOST: https://test-url.databricks.com
+      DATABRICKS_TOKEN: ${{ secrets[inputs.gha-secret-name] }}
     runs-on: ubuntu-latest
     steps:
-#      - name: test-input
-#        env:
-#          regex: '^[^,].*[^,]$'
-#        run: |
-#          [[ ${{ inputs.test-input }} =~ ${{ env.regex }} ]]
+      - name: test-secret
+        run: |
+          if [ -z ${{ env.DATABRICKS_TOKEN }} ]
+          then
+            echo "::error title=Invalid GHA Secret Name::Secret with name ${{ inputs.gha-secret-name }} is empty or doesn't exists"
+          fi
 
       - name: configure databricks
-        env:
-          DATABRICKS_HOST: https://test-url.databricks.com
-          DATABRICKS_TOKEN: test-token
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           databricks version
           echo "[DEFAULT]" >> .databrickscfg
           echo "host = ${{ env.DATABRICKS_HOST }}" >> .databrickscfg
           echo "token = ${{ env.DATABRICKS_TOKEN }}" >> .databrickscfg
+          echo "another_token = ${{ secrets[inputs.gha-secret-name] }}" >> .databrickscfg
           cat .databrickscfg
 
       - name: test
         run: |
-          cat .databrickscfg
+          echo "${{ inputs.secret-name }}"
+          secret_string=${{ secrets[inputs.gha-secret-name] }}
+          echo "$secret_string"
