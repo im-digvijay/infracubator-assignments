@@ -20,6 +20,5 @@ jobs:
 
       - name: Rebase develop on master
         run: |
-          git checkout develop
           git rebase master
           git push --force-with-lease origin develop
