@@ -21,5 +21,7 @@ jobs:
 
       - name: Rebase develop on master
         run: |
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com
           git rebase master
           git push --force-with-lease origin develop
